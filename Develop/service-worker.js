@@ -21,3 +21,17 @@ self.addEventListener('active', function (data) {
     })
   )
 })
+self.addEventListener('fetch', function (data) {
+  console.dir('fetch request... ' + data.request.url)
+  data.respondWith(
+    caches.match(data.call).then(function (call) {
+      if (call) {
+        console.dir('responding... ' + data.call.url)
+        return call
+      } else {
+        console.dir('file not cached/ fetching... ' + data.call.url)
+        return fetch(data.call)
+      }
+    })
+  )
+})
